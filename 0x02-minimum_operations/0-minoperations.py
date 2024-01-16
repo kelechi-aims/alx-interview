@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+""" Minimum Operations """
 def minOperations(n):
     """
     Calculate the fewest number of operations to have exactly n 'H'
