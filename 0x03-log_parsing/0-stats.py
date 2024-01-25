@@ -1,42 +1,40 @@
 #!/usr/bin/python3
-"""Python script that reads stdin line by line and computes metrics"""
-
+"""
+A script that reads stdin line by line and computes metrics
+"""
 import sys
 
 
-def print_n(t_file_size, status):
-    """Prints total file size and status list"""
-    print("File size: {:d}".format(t_file_size))
-    for key, value in sorted(status.items()):
-        if value != 0:
-            print("{}: {}".format(key, value))
+def computes_metric(total_size, status_codes):
+    """ Prints computed metric """
+    print(f"File size: {total_size}")
+    for key, value in sorted(status_codes.items()):
+        if value > 0:
+            print(f"{key}: {value}")
 
 
-status = {'200': 0, '301': 0, '400': 0, '401': 0,
-          '403': 0, '404': 0, '405': 0, '500': 0}
+total_size = 0
+status_codes = {"200": 0, "301": 0, "400": 0, "401": 0,
+                "403": 0, "404": 0, "405": 0, "500": 0}
+line_count = 0
 
-t_file_size = 0
-count = 0
 try:
     for line in sys.stdin:
-        args = line.split()
+        parts = line.split()
+        if len(parts) > 2:
+            size = int(parts[-1])
+            status = (parts[-2])
+            total_size += size
+            if status in status_codes:
+                status_codes[status] += 1
 
-        if len(args) > 2:
-            status_code = args[-2]
-            file_size = int(args[-1])
+            line_count += 1
 
-            if status_code in status:
-                status[status_code] += 1
-
-            t_file_size += file_size
-            count += 1
-
-            if count == 10:
-                print_n(t_file_size, status)
-                count = 0
+            if line_count % 10 == 0:
+                computes_metric(total_size, status_codes)
+                line_count = 0
 
 except KeyboardInterrupt:
     pass
-
 finally:
-    print_n(t_file_size, status)
+    computes_metric(total_size, status_codes)
