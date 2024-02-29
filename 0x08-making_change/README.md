@@ -7,7 +7,7 @@ For the “0. Change comes from within” project, you will tackle a classic pro
 
 ### Concepts Needed:
     1. Greedy Algorithms:
-    - Understanding how greedy algorithms work and why they are suitable for the coin change problem.
+    + Understanding how greedy algorithms work and why they are suitable for the coin change problem.
     - Recognizing the limitations of greedy algorithms and scenarios where they might not provide the optimal solution.
 
     2. **Dynamic Programming:**:
