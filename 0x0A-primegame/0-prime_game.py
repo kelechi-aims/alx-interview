@@ -1,34 +1,32 @@
 #!/usr/bin/python3
-''' prime game module '''
-
-
-def rwh_primes(n):
-    '''
-    adapted from:
-    https://stackoverflow.com/questions/2068372
-    /fastest-way-to-list-all-primes-below-n-in-python/3035188#3035188
-    '''
-    sieve = [True] * n
-    for i in range(3, int(n**0.5) + 1, 2):
-        if sieve[i]:
-            sieve[i * i::2 * i] = [False] * int((n - i * i - 1) / (2 * i) + 1)
-    return [2] + [i for i in range(3, n, 2) if sieve[i]]
-
-
-def playMatch(n):
-    ''' plays a single round '''
-    primes = rwh_primes(n + 1)
-    return 1 - (len(primes) % 2) if n > 1 else 1
-
+def isPrime(n):
+    if n <= 1:
+        return False
+    if n <= 3:
+        return True
+    if n % 2 == 0 or n % 3 == 0:
+        return False
+    i = 5
+    while i * i <= n:
+        if n % i == 0 or n % (i + 2) == 0:
+            return False
+        i += 6
+    return True
 
 def isWinner(x, nums):
-    ''' plays a full game '''
-    if type(x) is not int or x < 1:
+    maria_wins = 0
+    ben_wins = 0
+
+    for n in nums:
+        primes_count = sum(1 for i in range(2, n+1) if isPrime(i))
+        if primes_count % 2 == 0:
+            ben_wins += 1
+        else:
+            maria_wins += 1
+
+    if maria_wins > ben_wins:
+        return "Maria"
+    elif ben_wins > maria_wins:
+        return "Ben"
+    else:
         return None
-    players = {0: 'Maria', 1: 'Ben'}
-    wins = {0: 0, 1: 0}
-    for num in nums:
-        wins[playMatch(num)] += 1
-    return (None if wins[0] == wins[1]
-            else players[0] if wins[0] > wins[1]
-            else players[1])
