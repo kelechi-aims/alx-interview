@@ -1,5 +1,4 @@
 #!/usr/bin/python3
-
 def is_Prime(n):
     if n <= 1:
         return False
@@ -7,6 +6,7 @@ def is_Prime(n):
         if n % i == 0:
             return False
     return True
+
 
 def get_winner(n):
     # if n is even, ben wins bacause Maria cannot pick 2
@@ -17,6 +17,7 @@ def get_winner(n):
         return "Maria"
     else:
         return "Ben"
+
 
 def isWinner(x, nums):
     maria_wins = 0
