@@ -1,38 +1,34 @@
 #!/usr/bin/python3
-def is_Prime(n):
-    if n <= 1:
-        return False
-    for i in range(2, int(n**0.5) + 1):
-        if n % i == 0:
-            return False
-    return True
+''' prime game module '''
 
 
-def get_winner(n):
-    # if n is even, ben wins bacause Maria cannot pick 2
-    if n % 2 == 0:
-        return "Ben"
-    # If n is odd and prime, Maria wins because she can pick n itself
-    elif is_Prime(n):
-        return "Maria"
-    else:
-        return "Ben"
+def rwh_primes(n):
+    '''
+    adapted from:
+    https://stackoverflow.com/questions/2068372
+    /fastest-way-to-list-all-primes-below-n-in-python/3035188#3035188
+    '''
+    sieve = [True] * n
+    for i in range(3, int(n**0.5) + 1, 2):
+        if sieve[i]:
+            sieve[i * i::2 * i] = [False] * int((n - i * i - 1) / (2 * i) + 1)
+    return [2] + [i for i in range(3, n, 2) if sieve[i]]
+
+
+def playMatch(n):
+    ''' plays a single round '''
+    primes = rwh_primes(n + 1)
+    return 1 - (len(primes) % 2) if n > 1 else 1
 
 
 def isWinner(x, nums):
-    maria_wins = 0
-    ben_wins = 0
-
-    for n in nums:
-        winner = get_winner(n)
-        if winner == "Maria":
-            maria_wins += 1
-        elif winner == "Ben":
-            ben_wins += 1
-
-    if maria_wins > ben_wins:
-        return "Maria"
-    elif maria_wins < ben_wins:
-        return "Ben"
-    else:
+    ''' plays a full game '''
+    if type(x) is not int or x < 1:
         return None
+    players = {0: 'Maria', 1: 'Ben'}
+    wins = {0: 0, 1: 0}
+    for num in nums:
+        wins[playMatch(num)] += 1
+    return (None if wins[0] == wins[1]
+            else players[0] if wins[0] > wins[1]
+            else players[1])
